@@ -1,0 +1,4 @@
+name: "#BlameGareth"
+main: net.garethpw.BlameGareth.BlameGarethPlugin
+version: 0.1.4
+author: GarethPW
