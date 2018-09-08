@@ -5,7 +5,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 
-public abstract class BaseBlameCommand extends BaseCommand {
+abstract class BaseBlameCommand extends BaseCommand {
 
   protected static ProxyServer proxy = ProxyServer.getInstance();
   protected String participle;
@@ -14,8 +14,6 @@ public abstract class BaseBlameCommand extends BaseCommand {
     super(name, permission);
     participle = actionParticiple;
   }
-
-  protected abstract int increment();
 
   private static String indicator(int number) {
     int mod100 = number % 100;
@@ -31,6 +29,8 @@ public abstract class BaseBlameCommand extends BaseCommand {
       }
     }
   }
+
+  protected abstract int increment();
 
   @Override
   public void execute(CommandSender sender, String[] args) {

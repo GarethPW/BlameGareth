@@ -9,6 +9,7 @@ import java.lang.Runnable;
 import java.util.concurrent.TimeUnit;
 
 import net.md_5.bungee.api.plugin.Plugin;
+import net.md_5.bungee.api.plugin.PluginManager;
 
 import net.garethpw.BlameGareth.command.BlameGarethCommand;
 import net.garethpw.BlameGareth.command.ForgiveGarethCommand;
@@ -23,29 +24,28 @@ public class BlameGarethPlugin extends Plugin {
   private int blameCount, forgiveCount;
   private boolean statsChanged = false;
 
-  @Override
-  public void onEnable() {
-    instance = this;
+  public static class Stats {
+    public int blameCount, forgiveCount;
 
-    getValues();
-
-    getProxy().getScheduler().schedule(this, new Runnable() {
-      @Override
-      public void run() {
-        saveValues();
-      }
-    }, 60L, 60L, TimeUnit.SECONDS);
-
-    getProxy().getPluginManager().registerCommand(this, new BlameGarethCommand());
-    getProxy().getPluginManager().registerCommand(this, new ForgiveGarethCommand());
-    getProxy().getPluginManager().registerCommand(this, new IsItGarethsFaultCommand());
+    protected Stats(int blames, int forgives) {
+      blameCount = blames;
+      forgiveCount = forgives;
+    }
   }
 
-  @Override
-  public void onDisable() {
-    disable();
-    saveValues();
+  public static BlameGarethPlugin getInstance() { return instance; }
+
+  public int incrementBlames() {
+    statsChanged = true;
+    return ++blameCount;
   }
+
+  public int incrementForgives() {
+    statsChanged = true;
+    return ++forgiveCount;
+  }
+
+  public Stats getStats() { return new Stats(blameCount, forgiveCount); }
 
   private void disable() {
     // "disable" plugin
@@ -58,15 +58,19 @@ public class BlameGarethPlugin extends Plugin {
     e.printStackTrace();
     disable();
   }
-
-  private void getValues() {
+  
+  private File getPluginFolder() {
     File pluginFolder = getDataFolder(); // get plugin folder
 
     if (!pluginFolder.exists()) {
       pluginFolder.mkdir();
     }
+    
+    return pluginFolder;
+  }
 
-    File valuesFile = new File(pluginFolder, "values.json"); // get values store
+  private void getValues() {
+    File valuesFile = new File(getPluginFolder(), "values.json"); // get values store
 
     if (valuesFile.exists()) {
       try (FileReader reader = new FileReader(valuesFile)) {
@@ -90,7 +94,7 @@ public class BlameGarethPlugin extends Plugin {
   }
 
   public void saveValues() {
-    File valuesFile = new File(getDataFolder(), "values.json"); // get values store
+    File valuesFile = new File(getPluginFolder(), "values.json"); // get values store
     boolean valuesFileExisted = valuesFile.exists();
 
     if (!valuesFileExisted) {
@@ -119,27 +123,29 @@ public class BlameGarethPlugin extends Plugin {
     }
   }
 
-  public static BlameGarethPlugin getInstance() { return instance; }
+  @Override
+  public void onEnable() {
+    instance = this;
 
-  public int incrementBlames() {
-    statsChanged = true;
-    return ++blameCount;
+    getValues();
+
+    getProxy().getScheduler().schedule(this, new Runnable() {
+      public void run() {
+        saveValues();
+      }
+    }, 60L, 60L, TimeUnit.SECONDS);
+    
+    PluginManager pluginManager = getProxy().getPluginManager();
+
+    pluginManager.registerCommand(this, new BlameGarethCommand());
+    pluginManager.registerCommand(this, new ForgiveGarethCommand());
+    pluginManager.registerCommand(this, new IsItGarethsFaultCommand());
   }
 
-  public int incrementForgives() {
-    statsChanged = true;
-    return ++forgiveCount;
+  @Override
+  public void onDisable() {
+    disable();
+    saveValues();
   }
-
-  public static class Stats {
-    public int blameCount, forgiveCount;
-
-    protected Stats(int blames, int forgives) {
-      blameCount = blames;
-      forgiveCount = forgives;
-    }
-  }
-
-  public Stats getStats() { return new Stats(blameCount, forgiveCount); }
 
 }
