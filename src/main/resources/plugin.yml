@@ -1,4 +1,5 @@
-name: "#BlameGareth"
+name: "BlameGareth"
 main: net.garethpw.BlameGareth.BlameGarethPlugin
-version: 0.1.5
+version: 0.2.0
+description: Custom BungeeCord plugin for the longest-running inside joke known to man.
 author: GarethPW

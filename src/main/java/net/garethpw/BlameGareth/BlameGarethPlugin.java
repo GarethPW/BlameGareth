@@ -14,6 +14,7 @@ import net.md_5.bungee.api.plugin.PluginManager;
 import net.garethpw.BlameGareth.command.BlameGarethCommand;
 import net.garethpw.BlameGareth.command.ForgiveGarethCommand;
 import net.garethpw.BlameGareth.command.IsItGarethsFaultCommand;
+import net.garethpw.BlameGareth.RateLimiter;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -21,6 +22,8 @@ import org.json.simple.parser.JSONParser;
 public class BlameGarethPlugin extends Plugin {
 
   private static BlameGarethPlugin instance;
+  private static RateLimiter rateLimiter;
+
   private int blameCount, forgiveCount;
   private boolean statsChanged = false;
 
@@ -34,6 +37,8 @@ public class BlameGarethPlugin extends Plugin {
   }
 
   public static BlameGarethPlugin getInstance() { return instance; }
+
+  public static RateLimiter getRateLimiter() { return rateLimiter; }
 
   public int incrementBlames() {
     statsChanged = true;
@@ -49,7 +54,7 @@ public class BlameGarethPlugin extends Plugin {
 
   private void disable() {
     // "disable" plugin
-    getLogger().info("Disabling #BlameGareth...");
+    getLogger().info("Disabling BlameGareth...");
     getProxy().getPluginManager().unregisterCommands(this);
     getProxy().getScheduler().cancel(this);
   }
@@ -58,14 +63,14 @@ public class BlameGarethPlugin extends Plugin {
     e.printStackTrace();
     disable();
   }
-  
+
   private File getPluginFolder() {
     File pluginFolder = getDataFolder(); // get plugin folder
 
     if (!pluginFolder.exists()) {
       pluginFolder.mkdir();
     }
-    
+
     return pluginFolder;
   }
 
@@ -126,6 +131,7 @@ public class BlameGarethPlugin extends Plugin {
   @Override
   public void onEnable() {
     instance = this;
+    rateLimiter = new RateLimiter(10L);
 
     getValues();
 
@@ -134,7 +140,7 @@ public class BlameGarethPlugin extends Plugin {
         saveValues();
       }
     }, 60L, 60L, TimeUnit.SECONDS);
-    
+
     PluginManager pluginManager = getProxy().getPluginManager();
 
     pluginManager.registerCommand(this, new BlameGarethCommand());

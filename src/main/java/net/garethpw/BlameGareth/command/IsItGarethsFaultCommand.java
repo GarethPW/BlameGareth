@@ -2,9 +2,9 @@ package net.garethpw.BlameGareth.command;
 
 import net.garethpw.BlameGareth.BlameGarethPlugin.Stats;
 
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.TextComponent;
 
 public class IsItGarethsFaultCommand extends BaseCommand {
 

@@ -1,13 +1,18 @@
 package net.garethpw.BlameGareth.command;
 
+import net.garethpw.BlameGareth.BlameGarethPlugin;
+import net.garethpw.BlameGareth.RateLimiter;
+
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.TextComponent;
 
 abstract class BaseBlameCommand extends BaseCommand {
 
   protected static ProxyServer proxy = ProxyServer.getInstance();
+  protected static RateLimiter rateLimiter = BlameGarethPlugin.getRateLimiter();
+
   protected String participle;
 
   public BaseBlameCommand(String name, String permission, String actionParticiple) {
@@ -34,20 +39,27 @@ abstract class BaseBlameCommand extends BaseCommand {
 
   @Override
   public void execute(CommandSender sender, String[] args) {
-    TextComponent message = new TextComponent(sender.getName());
-    message.setColor(ChatColor.RED);
+    if (rateLimiter.canExecute(sender)) {
+      TextComponent message = new TextComponent(sender.getName());
+      message.setColor(ChatColor.RED);
 
-    int number = increment();
+      int number = increment();
 
-    TextComponent extra = new TextComponent(String.format(
-      " has %s Gareth for the %d%s time!",
-      participle, number, indicator(number)
-    ));
-    extra.setColor(ChatColor.GOLD);
+      TextComponent extra = new TextComponent(String.format(
+        " has %s Gareth for the %d%s time!",
+        participle, number, indicator(number)
+      ));
+      extra.setColor(ChatColor.GOLD);
 
-    message.addExtra(extra);
+      message.addExtra(extra);
 
-    proxy.broadcast(message);
+      proxy.broadcast(message);
+    } else {
+      TextComponent message = new TextComponent("You're doing that too quickly!");
+      message.setColor(ChatColor.RED);
+
+      sender.sendMessage(message);
+    }
   }
 
 }
