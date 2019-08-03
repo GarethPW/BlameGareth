@@ -8,37 +8,37 @@ import java.util.UUID;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-public class RateLimiter {
+public final class RateLimiter {
 
-  private HashMap<UUID,Instant> instants;
-  private long delay;
+  private final HashMap<UUID,Instant> lastExecution;
+  private final long delay;
 
-  protected RateLimiter(long delay) {
-    instants = new HashMap<UUID,Instant>();
+  RateLimiter(final long delay) {
+    lastExecution = new HashMap<UUID,Instant>();
     this.delay = delay;
   }
 
-  public boolean canExecute(ProxiedPlayer player) {
-    boolean verdict;
+  public boolean canExecute(final ProxiedPlayer player) {
+    final boolean verdict;
 
-    Instant now = Instant.now();
-    UUID uuid = player.getUniqueId();
+    final Instant now = Instant.now();
+    final UUID uuid = player.getUniqueId();
 
-    if (instants.containsKey(uuid)) {
-      Instant last = instants.get(uuid);
+    if (lastExecution.containsKey(uuid)) {
+      Instant last = lastExecution.get(uuid);
       verdict = Duration.between(last, now).getSeconds() >= delay;
     } else {
       verdict = true;
     }
 
     if (verdict) {
-      instants.put(uuid, now);
+      lastExecution.put(uuid, now);
     }
 
     return verdict;
   }
 
-  public boolean canExecute(CommandSender sender) {
+  public boolean canExecute(final CommandSender sender) {
     if (sender instanceof ProxiedPlayer) {
       return canExecute((ProxiedPlayer) sender);
     } else {

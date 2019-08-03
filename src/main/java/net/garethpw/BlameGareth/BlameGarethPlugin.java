@@ -1,25 +1,25 @@
 package net.garethpw.BlameGareth;
 
+import static java.lang.Math.toIntExact;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import static java.lang.Math.toIntExact;
 import java.lang.Runnable;
 import java.util.concurrent.TimeUnit;
 
 import net.md_5.bungee.api.plugin.Plugin;
-import net.md_5.bungee.api.plugin.PluginManager;
 
+import net.garethpw.BlameGareth.RateLimiter;
 import net.garethpw.BlameGareth.command.BlameGarethCommand;
 import net.garethpw.BlameGareth.command.ForgiveGarethCommand;
 import net.garethpw.BlameGareth.command.IsItGarethsFaultCommand;
-import net.garethpw.BlameGareth.RateLimiter;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-public class BlameGarethPlugin extends Plugin {
+public final class BlameGarethPlugin extends Plugin {
 
   private static BlameGarethPlugin instance;
   private static RateLimiter rateLimiter;
@@ -27,18 +27,20 @@ public class BlameGarethPlugin extends Plugin {
   private int blameCount, forgiveCount;
   private boolean statsChanged = false;
 
-  public static class Stats {
-    public int blameCount, forgiveCount;
+  public static final class Stats {
+    public final int blameCount, forgiveCount;
 
-    protected Stats(int blames, int forgives) {
-      blameCount = blames;
-      forgiveCount = forgives;
+    private Stats(final int blameCount, final int forgiveCount) {
+      this.blameCount = blameCount;
+      this.forgiveCount = forgiveCount;
     }
   }
 
   public static BlameGarethPlugin getInstance() { return instance; }
 
   public static RateLimiter getRateLimiter() { return rateLimiter; }
+
+  public Stats getStats() { return new Stats(blameCount, forgiveCount); }
 
   public int incrementBlames() {
     statsChanged = true;
@@ -49,8 +51,6 @@ public class BlameGarethPlugin extends Plugin {
     statsChanged = true;
     return ++forgiveCount;
   }
-
-  public Stats getStats() { return new Stats(blameCount, forgiveCount); }
 
   private void disable() {
     // "disable" plugin
@@ -99,8 +99,8 @@ public class BlameGarethPlugin extends Plugin {
   }
 
   public void saveValues() {
-    File valuesFile = new File(getPluginFolder(), "values.json"); // get values store
-    boolean valuesFileExisted = valuesFile.exists();
+    final File valuesFile = new File(getPluginFolder(), "values.json"); // get values store
+    final boolean valuesFileExisted = valuesFile.exists();
 
     if (!valuesFileExisted) {
       try {
@@ -113,13 +113,13 @@ public class BlameGarethPlugin extends Plugin {
     }
 
     if (statsChanged || !valuesFileExisted) {
-      JSONObject valuesObj = new JSONObject();
+      final JSONObject valuesObj = new JSONObject();
       valuesObj.put("blame_count", blameCount);
       valuesObj.put("forgive_count", forgiveCount);
 
       statsChanged = false;
 
-      try (FileWriter writer = new FileWriter(valuesFile)) {
+      try (final FileWriter writer = new FileWriter(valuesFile)) {
         writer.write(valuesObj.toJSONString());
       } catch (IOException e) {
         e.printStackTrace();
@@ -136,16 +136,15 @@ public class BlameGarethPlugin extends Plugin {
     getValues();
 
     getProxy().getScheduler().schedule(this, new Runnable() {
+      @Override
       public void run() {
         saveValues();
       }
     }, 60L, 60L, TimeUnit.SECONDS);
 
-    PluginManager pluginManager = getProxy().getPluginManager();
-
-    pluginManager.registerCommand(this, new BlameGarethCommand());
-    pluginManager.registerCommand(this, new ForgiveGarethCommand());
-    pluginManager.registerCommand(this, new IsItGarethsFaultCommand());
+    getProxy().getPluginManager().registerCommand(this, new BlameGarethCommand());
+    getProxy().getPluginManager().registerCommand(this, new ForgiveGarethCommand());
+    getProxy().getPluginManager().registerCommand(this, new IsItGarethsFaultCommand());
   }
 
   @Override

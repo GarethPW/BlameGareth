@@ -1,29 +1,25 @@
 package net.garethpw.BlameGareth.command;
 
 import net.garethpw.BlameGareth.BlameGarethPlugin;
-import net.garethpw.BlameGareth.RateLimiter;
 
-import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.chat.TextComponent;
 
 abstract class BaseBlameCommand extends BaseCommand {
 
-  protected static ProxyServer proxy = ProxyServer.getInstance();
-  protected static RateLimiter rateLimiter = BlameGarethPlugin.getRateLimiter();
+  private final String participle;
 
-  protected String participle;
-
-  public BaseBlameCommand(String name, String permission, String actionParticiple) {
+  protected BaseBlameCommand(final String name, final String permission, final String participle) {
     super(name, permission);
-    participle = actionParticiple;
+    this.participle = participle;
   }
 
-  private static String indicator(int number) {
-    int mod100 = number % 100;
+  private static String indicator(final int number) {
+    final int mod100 = number % 100;
 
-    if (11 <= mod100 && mod100 <= 19) {
+    if (11 <= mod100 && mod100 <= 13) {
       return "th";
     } else {
       switch (mod100 % 10) {
@@ -38,14 +34,14 @@ abstract class BaseBlameCommand extends BaseCommand {
   protected abstract int increment();
 
   @Override
-  public void execute(CommandSender sender, String[] args) {
-    if (rateLimiter.canExecute(sender)) {
-      TextComponent message = new TextComponent(sender.getName());
+  public final void execute(final CommandSender sender, final String[] args) {
+    if (BlameGarethPlugin.getRateLimiter().canExecute(sender)) {
+      final TextComponent message = new TextComponent(sender.getName());
       message.setColor(ChatColor.RED);
 
-      int number = increment();
+      final int number = increment();
 
-      TextComponent extra = new TextComponent(String.format(
+      final TextComponent extra = new TextComponent(String.format(
         " has %s Gareth for the %d%s time!",
         participle, number, indicator(number)
       ));
@@ -53,9 +49,9 @@ abstract class BaseBlameCommand extends BaseCommand {
 
       message.addExtra(extra);
 
-      proxy.broadcast(message);
+      ProxyServer.getInstance().broadcast(message);
     } else {
-      TextComponent message = new TextComponent("You're doing that too quickly!");
+      final TextComponent message = new TextComponent("You're doing that too quickly!");
       message.setColor(ChatColor.RED);
 
       sender.sendMessage(message);
