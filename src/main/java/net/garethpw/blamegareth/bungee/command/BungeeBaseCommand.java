@@ -1,14 +1,14 @@
-package net.garethpw.BlameGareth.command;
+package net.garethpw.blamegareth.bungee.command;
 
 import net.md_5.bungee.api.plugin.Command;
 
-abstract class BaseCommand extends Command {
+abstract class BungeeBaseCommand extends Command {
 
-  protected BaseCommand(final String name, final String permission, final String... aliases) {
+  protected BungeeBaseCommand(final String name, final String permission, final String... aliases) {
     super(name, permission, aliases);
   }
 
-  protected BaseCommand(final String name, final String permission) {
+  protected BungeeBaseCommand(final String name, final String permission) {
     super(name, permission);
   }
 

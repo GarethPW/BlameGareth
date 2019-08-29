@@ -1,15 +1,15 @@
-package net.garethpw.BlameGareth.command;
+package net.garethpw.blamegareth.bungee.command;
 
-import net.garethpw.BlameGareth.BlameGarethPlugin;
-import net.garethpw.BlameGareth.BlameGarethPlugin.Stats;
+import net.garethpw.blamegareth.bungee.BungeeBlameGarethPlugin;
+import net.garethpw.blamegareth.bungee.BungeeBlameGarethPlugin.Stats;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 
-public final class IsItGarethsFaultCommand extends BaseCommand {
+public final class BungeeIsItGarethsFaultCommand extends BungeeBaseCommand {
 
-  public IsItGarethsFaultCommand() {
+  public BungeeIsItGarethsFaultCommand() {
     super("isitgarethsfault", "blamegareth.check", "iigf", "checkgareth");
   }
 
@@ -19,7 +19,7 @@ public final class IsItGarethsFaultCommand extends BaseCommand {
 
   @Override
   public void execute(final CommandSender sender, final String[] args) {
-    final Stats stats = BlameGarethPlugin.getInstance().getStats();
+    final Stats stats = BungeeBlameGarethPlugin.getInstance().getStats();
 
     final TextComponent message = new TextComponent(String.format(
       "Blamed: %d time%s\n",

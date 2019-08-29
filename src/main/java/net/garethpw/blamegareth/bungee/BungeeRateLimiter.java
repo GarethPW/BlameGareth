@@ -1,4 +1,4 @@
-package net.garethpw.BlameGareth;
+package net.garethpw.blamegareth.bungee;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -8,12 +8,12 @@ import java.util.UUID;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-public final class RateLimiter {
+public final class BungeeRateLimiter {
 
   private final HashMap<UUID,Instant> lastExecution;
   private final long delay;
 
-  RateLimiter(final long delay) {
+  BungeeRateLimiter(final long delay) {
     lastExecution = new HashMap<UUID,Instant>();
     this.delay = delay;
   }

@@ -1,17 +1,17 @@
-package net.garethpw.BlameGareth.command;
+package net.garethpw.blamegareth.bungee.command;
 
-import net.garethpw.BlameGareth.BlameGarethPlugin;
+import net.garethpw.blamegareth.bungee.BungeeBlameGarethPlugin;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 
-abstract class BaseBlameCommand extends BaseCommand {
+abstract class BungeeBaseBlameCommand extends BungeeBaseCommand {
 
   private final String participle;
 
-  protected BaseBlameCommand(final String name, final String permission, final String participle) {
+  protected BungeeBaseBlameCommand(final String name, final String permission, final String participle) {
     super(name, permission);
     this.participle = participle;
   }
@@ -35,7 +35,7 @@ abstract class BaseBlameCommand extends BaseCommand {
 
   @Override
   public final void execute(final CommandSender sender, final String[] args) {
-    if (BlameGarethPlugin.getRateLimiter().canExecute(sender)) {
+    if (BungeeBlameGarethPlugin.getRateLimiter().canExecute(sender)) {
       final TextComponent message = new TextComponent(sender.getName());
       message.setColor(ChatColor.RED);
 

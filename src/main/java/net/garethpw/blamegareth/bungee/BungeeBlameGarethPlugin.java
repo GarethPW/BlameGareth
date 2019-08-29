@@ -1,4 +1,4 @@
-package net.garethpw.BlameGareth;
+package net.garethpw.blamegareth.bungee;
 
 import static java.lang.Math.toIntExact;
 
@@ -11,18 +11,17 @@ import java.util.concurrent.TimeUnit;
 
 import net.md_5.bungee.api.plugin.Plugin;
 
-import net.garethpw.BlameGareth.RateLimiter;
-import net.garethpw.BlameGareth.command.BlameGarethCommand;
-import net.garethpw.BlameGareth.command.ForgiveGarethCommand;
-import net.garethpw.BlameGareth.command.IsItGarethsFaultCommand;
+import net.garethpw.blamegareth.bungee.command.BungeeBlameGarethCommand;
+import net.garethpw.blamegareth.bungee.command.BungeeForgiveGarethCommand;
+import net.garethpw.blamegareth.bungee.command.BungeeIsItGarethsFaultCommand;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-public final class BlameGarethPlugin extends Plugin {
+public final class BungeeBlameGarethPlugin extends Plugin {
 
-  private static BlameGarethPlugin instance;
-  private static RateLimiter rateLimiter;
+  private static BungeeBlameGarethPlugin instance;
+  private static BungeeRateLimiter rateLimiter;
 
   private int blameCount, forgiveCount;
   private boolean statsChanged = false;
@@ -36,9 +35,9 @@ public final class BlameGarethPlugin extends Plugin {
     }
   }
 
-  public static BlameGarethPlugin getInstance() { return instance; }
+  public static BungeeBlameGarethPlugin getInstance() { return instance; }
 
-  public static RateLimiter getRateLimiter() { return rateLimiter; }
+  public static BungeeRateLimiter getRateLimiter() { return rateLimiter; }
 
   public Stats getStats() { return new Stats(blameCount, forgiveCount); }
 
@@ -131,7 +130,7 @@ public final class BlameGarethPlugin extends Plugin {
   @Override
   public void onEnable() {
     instance = this;
-    rateLimiter = new RateLimiter(10L);
+    rateLimiter = new BungeeRateLimiter(10L);
 
     getValues();
 
@@ -142,9 +141,9 @@ public final class BlameGarethPlugin extends Plugin {
       }
     }, 60L, 60L, TimeUnit.SECONDS);
 
-    getProxy().getPluginManager().registerCommand(this, new BlameGarethCommand());
-    getProxy().getPluginManager().registerCommand(this, new ForgiveGarethCommand());
-    getProxy().getPluginManager().registerCommand(this, new IsItGarethsFaultCommand());
+    getProxy().getPluginManager().registerCommand(this, new BungeeBlameGarethCommand());
+    getProxy().getPluginManager().registerCommand(this, new BungeeForgiveGarethCommand());
+    getProxy().getPluginManager().registerCommand(this, new BungeeIsItGarethsFaultCommand());
   }
 
   @Override

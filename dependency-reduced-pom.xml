@@ -28,7 +28,7 @@
               <transformers>
                 <transformer>
                   <manifestEntries>
-                    <Main-Class>net.garethpw.BlameGareth.BlameGarethPlugin</Main-Class>
+                    <Main-Class>net.garethpw.blamegareth.bungee.BungeeBlameGarethPlugin</Main-Class>
                   </manifestEntries>
                 </transformer>
               </transformers>
