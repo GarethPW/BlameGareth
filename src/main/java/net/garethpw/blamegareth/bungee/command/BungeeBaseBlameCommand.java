@@ -1,5 +1,6 @@
 package net.garethpw.blamegareth.bungee.command;
 
+import static net.garethpw.blamegareth.common.command.BaseBlameCommand.*;
 import net.garethpw.blamegareth.bungee.BungeeBlameGarethPlugin;
 
 import net.md_5.bungee.api.ChatColor;
@@ -14,21 +15,6 @@ abstract class BungeeBaseBlameCommand extends BungeeBaseCommand {
   protected BungeeBaseBlameCommand(final String name, final String permission, final String participle) {
     super(name, permission);
     this.participle = participle;
-  }
-
-  private static String indicator(final int number) {
-    final int mod100 = number % 100;
-
-    if (11 <= mod100 && mod100 <= 13) {
-      return "th";
-    } else {
-      switch (mod100 % 10) {
-        case 1:  return "st";
-        case 2:  return "nd";
-        case 3:  return "rd";
-        default: return "th";
-      }
-    }
   }
 
   protected abstract int increment();

@@ -1,7 +1,9 @@
 package net.garethpw.blamegareth.bungee.command;
 
+import static net.garethpw.blamegareth.common.command.IsItGarethsFaultCommand.*;
+
 import net.garethpw.blamegareth.bungee.BungeeBlameGarethPlugin;
-import net.garethpw.blamegareth.bungee.BungeeBlameGarethPlugin.Stats;
+import net.garethpw.blamegareth.common.Stats;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
@@ -11,10 +13,6 @@ public final class BungeeIsItGarethsFaultCommand extends BungeeBaseCommand {
 
   public BungeeIsItGarethsFaultCommand() {
     super("isitgarethsfault", "blamegareth.check", "iigf", "checkgareth");
-  }
-
-  private static String pluralise(final int number, final String singular, final String plural) {
-    return number == 1 ? singular : plural;
   }
 
   @Override

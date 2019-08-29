@@ -14,6 +14,7 @@ import net.md_5.bungee.api.plugin.Plugin;
 import net.garethpw.blamegareth.bungee.command.BungeeBlameGarethCommand;
 import net.garethpw.blamegareth.bungee.command.BungeeForgiveGarethCommand;
 import net.garethpw.blamegareth.bungee.command.BungeeIsItGarethsFaultCommand;
+import net.garethpw.blamegareth.common.Stats;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -25,15 +26,6 @@ public final class BungeeBlameGarethPlugin extends Plugin {
 
   private int blameCount, forgiveCount;
   private boolean statsChanged = false;
-
-  public static final class Stats {
-    public final int blameCount, forgiveCount;
-
-    private Stats(final int blameCount, final int forgiveCount) {
-      this.blameCount = blameCount;
-      this.forgiveCount = forgiveCount;
-    }
-  }
 
   public static BungeeBlameGarethPlugin getInstance() { return instance; }
 
