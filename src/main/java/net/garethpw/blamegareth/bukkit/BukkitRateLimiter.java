@@ -1,13 +1,13 @@
-package net.garethpw.blamegareth.bungee;
+package net.garethpw.blamegareth.bukkit;
 
 import net.garethpw.blamegareth.common.RateLimiter;
 
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.CommandSender;
 
-public final class BungeeRateLimiter extends RateLimiter {
+public final class BukkitRateLimiter extends RateLimiter {
 
-  BungeeRateLimiter(final long delay) {
+  BukkitRateLimiter(final long delay) {
     super(delay);
   }
 

@@ -1,16 +1,16 @@
-package net.garethpw.blamegareth.bungee.command;
+package net.garethpw.blamegareth.bukkit.command;
 
-import net.garethpw.blamegareth.bungee.BungeeBlameGarethPlugin;
+import net.garethpw.blamegareth.bukkit.BukkitBlameGarethPlugin;
 
-public final class BungeeForgiveGarethCommand extends BungeeBaseBlameCommand {
+public final class BukkitForgiveGarethCommand extends BukkitBaseBlameCommand {
 
-  public BungeeForgiveGarethCommand() {
+  public BukkitForgiveGarethCommand() {
     super("forgivegareth", "blamegareth.blame", "forgiven");
   }
 
   @Override
   protected int increment() {
-    return BungeeBlameGarethPlugin.getInstance().incrementForgives();
+    return BukkitBlameGarethPlugin.getInstance().incrementForgives();
   }
 
 }

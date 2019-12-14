@@ -1,18 +1,19 @@
-package net.garethpw.blamegareth.bungee.command;
+package net.garethpw.blamegareth.bukkit.command;
 
 import static net.garethpw.blamegareth.common.command.BaseBlameCommand.*;
-import net.garethpw.blamegareth.bungee.BungeeBlameGarethPlugin;
+
+import net.garethpw.blamegareth.bukkit.BukkitBlameGarethPlugin;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 
-abstract class BungeeBaseBlameCommand extends BungeeBaseCommand {
+abstract class BukkitBaseBlameCommand extends BukkitBaseCommand {
 
   private final String participle;
 
-  protected BungeeBaseBlameCommand(final String name, final String permission, final String participle) {
+  protected BukkitBaseBlameCommand(final String name, final String permission, final String participle) {
     super(name, permission);
     this.participle = participle;
   }
@@ -21,7 +22,7 @@ abstract class BungeeBaseBlameCommand extends BungeeBaseCommand {
 
   @Override
   public final void execute(final CommandSender sender, final String[] args) {
-    if (BungeeBlameGarethPlugin.getRateLimiter().canExecute(sender)) {
+    if (BukkitBlameGarethPlugin.getRateLimiter().canExecute(sender)) {
       final TextComponent message = new TextComponent(sender.getName());
       message.setColor(ChatColor.RED);
 
