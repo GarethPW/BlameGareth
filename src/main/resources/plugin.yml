@@ -1,0 +1,33 @@
+name: "BlameGareth"
+main: net.garethpw.blamegareth.bukkit.BukkitBlameGarethPlugin
+version: 0.3.0
+description: Custom Bukkit plugin for the longest-running inside joke known to man.
+author: Gareth Welch
+
+commands:
+  blamegareth:
+    description: Blame Gareth.
+    usage: "Usage: /blamegareth"
+    permission: blamegareth.blame
+  forgivegareth:
+    description: Forgive Gareth.
+    usage: "Usage: /forgivegareth"
+    permission: blamegareth.blame
+  isitgarethsfault:
+    description: "Check Gareth's reputation."
+    usage: "Usage: /isitgarethsfault"
+    permission: blamegareth.check
+    aliases:
+      - iigf
+      - checkgareth
+
+permissions:
+  blamegareth.*:
+    description: Allows all commands to be executed.
+    children:
+      blamegareth.blame: true
+      blamegareth.check: true
+  blamegareth.blame:
+    description: Allows execution of /blamegareth and /forgivegareth.
+  blamegareth.check:
+    description: Allows execution of /isitgarethsfault.

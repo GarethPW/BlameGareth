@@ -4,45 +4,40 @@ import static net.garethpw.blamegareth.common.command.BaseBlameCommand.*;
 
 import net.garethpw.blamegareth.bukkit.BukkitBlameGarethPlugin;
 
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 
-abstract class BukkitBaseBlameCommand extends BukkitBaseCommand {
+abstract class BukkitBaseBlameCommand implements CommandExecutor {
 
   private final String participle;
 
-  protected BukkitBaseBlameCommand(final String name, final String permission, final String participle) {
-    super(name, permission);
+  protected BukkitBaseBlameCommand(final String participle) {
+    super();
     this.participle = participle;
   }
 
   protected abstract int increment();
 
   @Override
-  public final void execute(final CommandSender sender, final String[] args) {
+  public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
     if (BukkitBlameGarethPlugin.getRateLimiter().canExecute(sender)) {
-      final TextComponent message = new TextComponent(sender.getName());
-      message.setColor(ChatColor.RED);
-
       final int number = increment();
 
-      final TextComponent extra = new TextComponent(String.format(
+      final String username = ChatColor.RED + sender.getName();
+
+      final String action = ChatColor.GOLD + String.format(
         " has %s Gareth for the %d%s time!",
         participle, number, indicator(number)
-      ));
-      extra.setColor(ChatColor.GOLD);
+      );
 
-      message.addExtra(extra);
-
-      ProxyServer.getInstance().broadcast(message);
+      sender.getServer().broadcastMessage(username + action);
     } else {
-      final TextComponent message = new TextComponent("You're doing that too quickly!");
-      message.setColor(ChatColor.RED);
-
-      sender.sendMessage(message);
+      sender.sendMessage(ChatColor.RED + "You're doing that too quickly!");
     }
+
+    return true;
   }
 
 }

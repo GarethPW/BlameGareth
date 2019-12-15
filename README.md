@@ -1,2 +1,2 @@
 # BlameGareth
-A custom BungeeCord plugin for the MumboCraft Minecraft server.
+A custom Bukkit and BungeeCord plugin for the MumboCraft Minecraft server.

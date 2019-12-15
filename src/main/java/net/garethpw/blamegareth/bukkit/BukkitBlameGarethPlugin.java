@@ -9,17 +9,17 @@ import java.io.IOException;
 import java.lang.Runnable;
 import java.util.concurrent.TimeUnit;
 
-import net.md_5.bungee.api.plugin.Plugin;
-
 import net.garethpw.blamegareth.bukkit.command.BukkitBlameGarethCommand;
 import net.garethpw.blamegareth.bukkit.command.BukkitForgiveGarethCommand;
 import net.garethpw.blamegareth.bukkit.command.BukkitIsItGarethsFaultCommand;
 import net.garethpw.blamegareth.common.Stats;
 
+import org.bukkit.plugin.java.JavaPlugin;
+
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-public final class BukkitBlameGarethPlugin extends Plugin {
+public final class BukkitBlameGarethPlugin extends JavaPlugin {
 
   private static BukkitBlameGarethPlugin instance;
   private static BukkitRateLimiter rateLimiter;
@@ -45,9 +45,7 @@ public final class BukkitBlameGarethPlugin extends Plugin {
 
   private void disable() {
     // "disable" plugin
-    getLogger().info("Disabling BlameGareth...");
-    getProxy().getPluginManager().unregisterCommands(this);
-    getProxy().getScheduler().cancel(this);
+    getServer().getScheduler().cancelTasks(this);
   }
 
   private void disable(Exception e) {
@@ -126,16 +124,16 @@ public final class BukkitBlameGarethPlugin extends Plugin {
 
     getValues();
 
-    getProxy().getScheduler().schedule(this, new Runnable() {
+    getServer().getScheduler().runTaskTimerAsynchronously(this, new Runnable() {
       @Override
       public void run() {
         saveValues();
       }
-    }, 60L, 60L, TimeUnit.SECONDS);
+    }, 1200L, 1200L); // 1200 ticks == 60 seconds
 
-    getProxy().getPluginManager().registerCommand(this, new BukkitBlameGarethCommand());
-    getProxy().getPluginManager().registerCommand(this, new BukkitForgiveGarethCommand());
-    getProxy().getPluginManager().registerCommand(this, new BukkitIsItGarethsFaultCommand());
+    this.getCommand("blamegareth").setExecutor(new BukkitBlameGarethCommand());
+    this.getCommand("forgivegareth").setExecutor(new BukkitForgiveGarethCommand());
+    this.getCommand("isitgarethsfault").setExecutor(new BukkitIsItGarethsFaultCommand());
   }
 
   @Override

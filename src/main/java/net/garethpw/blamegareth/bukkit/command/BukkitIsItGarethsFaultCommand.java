@@ -5,46 +5,42 @@ import static net.garethpw.blamegareth.common.command.IsItGarethsFaultCommand.*;
 import net.garethpw.blamegareth.bukkit.BukkitBlameGarethPlugin;
 import net.garethpw.blamegareth.common.Stats;
 
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 
-public final class BukkitIsItGarethsFaultCommand extends BukkitBaseCommand {
-
-  public BukkitIsItGarethsFaultCommand() {
-    super("isitgarethsfault", "blamegareth.check", "iigf", "checkgareth");
-  }
+public final class BukkitIsItGarethsFaultCommand implements CommandExecutor {
 
   @Override
-  public void execute(final CommandSender sender, final String[] args) {
+  public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
     final Stats stats = BukkitBlameGarethPlugin.getInstance().getStats();
 
-    final TextComponent message = new TextComponent(String.format(
+    final String blamed = String.format(
       "Blamed: %d time%s\n",
       stats.blameCount, pluralise(stats.blameCount, "", "s")
-    ));
+    );
 
-    message.addExtra(String.format(
+    final String forgiven = String.format(
       "Forgiven: %d time%s\n",
       stats.forgiveCount, pluralise(stats.forgiveCount, "", "s")
-    ));
+    );
 
-    message.addExtra("Verdict: ");
-    message.setColor(ChatColor.GOLD);
-
-    final TextComponent verdictBool = new TextComponent();
+    String verdict = String.format(
+      "Verdict: ",
+      stats.blameCount > stats.forgiveCount ?
+        ChatColor.GREEN + "Yes" : ChatColor.RED + "No"
+    );
 
     if (stats.blameCount > stats.forgiveCount) {
-      verdictBool.setText("Yes");
-      verdictBool.setColor(ChatColor.GREEN);
+      verdict += ChatColor.GREEN + "Yes";
     } else {
-      verdictBool.setText("No");
-      verdictBool.setColor(ChatColor.RED);
+      verdict += ChatColor.RED + "No";
     }
 
-    message.addExtra(verdictBool);
+    sender.sendMessage(ChatColor.GOLD + blamed + forgiven + verdict);
 
-    sender.sendMessage(message);
+    return true;
   }
 
 }

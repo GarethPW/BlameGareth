@@ -2,8 +2,8 @@ package net.garethpw.blamegareth.bukkit;
 
 import net.garethpw.blamegareth.common.RateLimiter;
 
-import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.CommandSender;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public final class BukkitRateLimiter extends RateLimiter {
 
@@ -12,9 +12,9 @@ public final class BukkitRateLimiter extends RateLimiter {
   }
 
   public boolean canExecute(final CommandSender sender) {
-    if (sender instanceof ProxiedPlayer) {
+    if (sender instanceof Player) {
       return canExecute(
-        ((ProxiedPlayer) sender).getUniqueId()
+        ((Player) sender).getUniqueId()
       );
     } else {
       return true;

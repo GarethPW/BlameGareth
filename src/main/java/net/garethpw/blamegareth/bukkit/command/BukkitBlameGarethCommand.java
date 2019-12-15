@@ -5,7 +5,7 @@ import net.garethpw.blamegareth.bukkit.BukkitBlameGarethPlugin;
 public final class BukkitBlameGarethCommand extends BukkitBaseBlameCommand {
 
   public BukkitBlameGarethCommand() {
-    super("blamegareth", "blamegareth.blame", "blamed");
+    super("blamed");
   }
 
   @Override
